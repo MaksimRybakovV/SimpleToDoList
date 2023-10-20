@@ -1,5 +1,5 @@
-
 using WebApi.Data;
+using WebApi.Services.TodoTaskService;
 
 namespace WebApi
 {
@@ -13,6 +13,8 @@ namespace WebApi
 
             builder.Services.AddControllers();
             builder.Services.AddDbContext<DataContext>();
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            builder.Services.AddScoped<ITodoTaskService, TodoTaskService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

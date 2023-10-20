@@ -14,5 +14,6 @@ namespace WebApi.Data
         }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<TodoTask> TodoTasks => Set<TodoTask>();
     }
 }

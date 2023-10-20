@@ -13,5 +13,8 @@ namespace Entities.Models
         public TaskCategory Category { get; set; }
         public TaskPriority Priority { get; set; }
         public TaskExecutionStatus Status { get; set; } = TaskExecutionStatus.New;
+
+        public int UserId { get; set; }
+        public User? User { get; set; }
     }
 }
