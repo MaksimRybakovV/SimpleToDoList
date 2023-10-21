@@ -1,4 +1,5 @@
 using WebApi.Data;
+using WebApi.Services.AuthotizationService;
 using WebApi.Services.TodoTaskService;
 using WebApi.Services.UserService;
 
@@ -17,6 +18,7 @@ namespace WebApi
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddScoped<ITodoTaskService, TodoTaskService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
