@@ -1,7 +1,6 @@
 ﻿using Entities.Dtos.TodoTaskDtos;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApi.Services.TodoTaskService;
 
 namespace WebApi.Controllers
@@ -85,26 +84,26 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("api/Users/[controller]/{id}")]
-        public async Task<ActionResult> UpdateTask(UpdateTodoTaskDto updatedTodoTask)
+        public async Task<ActionResult<ServiceResponce<string>>> UpdateTask(UpdateTodoTaskDto updatedTodoTask)
         {
             var responce = await _service.UpdateTodoAsync(updatedTodoTask);
 
             if (responce.Data is null)
-                return NotFound();
+                return NotFound(responce);
 
-            return NoContent();
+            return Ok(responce);
         }
 
         [HttpDelete]
         [Route("api/Users/[controller]/{id}")]
-        public async Task<ActionResult> DeleteTask(int id)
+        public async Task<ActionResult<ServiceResponce<string>>> DeleteTask(int id)
         {
             var responce = await _service.DeleteTodoAsync(id);
 
             if (responce.Data is null)
-                return NotFound();
+                return NotFound(responce);
 
-            return NoContent();
+            return Ok(responce);
         }
     }
 }
