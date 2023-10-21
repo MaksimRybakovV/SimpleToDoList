@@ -11,6 +11,5 @@
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime TokenCreated { get; set; }
         public DateTime TokenExpires { get; set; }
-        public List<Task> Tasks { get; set; } = new List<Task>();
     }
 }

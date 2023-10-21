@@ -46,11 +46,11 @@ namespace WebApi.Services.TodoTaskService
             {
                 var todo = await _context.TodoTasks
                     .SingleOrDefaultAsync(t => t.Id == id)
-                    ?? throw new Exception($"User with Id '{id}' not found!");
+                    ?? throw new Exception($"Task with Id '{id}' not found!");
 
                 _context.TodoTasks.Remove(todo);
                 await _context.SaveChangesAsync();
-                responce.Data = $"User with Id '{id}' deleted!";
+                responce.Data = $"Task with Id '{id}' deleted!";
             }
             catch (Exception ex)
             {
@@ -104,7 +104,7 @@ namespace WebApi.Services.TodoTaskService
             {
                 var todo = await _context.TodoTasks
                     .SingleOrDefaultAsync(u => u.Id == id)
-                    ?? throw new Exception($"User with Id '{id}' not found!");
+                    ?? throw new Exception($"Todo with Id '{id}' not found!");
 
                 responce.Data = _mapper.Map<GetTodoTaskDto>(todo);
             }
@@ -193,7 +193,7 @@ namespace WebApi.Services.TodoTaskService
             {
                 var todo = await _context.TodoTasks
                     .SingleOrDefaultAsync(t => t.Id == updatedTodoTask.Id)
-                    ?? throw new Exception($"User with Id '{updatedTodoTask.Id}' not found!");
+                    ?? throw new Exception($"Todo with Id '{updatedTodoTask.Id}' not found!");
 
                 todo.Title = updatedTodoTask.Title;
                 todo.Description = updatedTodoTask.Description;
@@ -204,7 +204,7 @@ namespace WebApi.Services.TodoTaskService
                 todo.Status = updatedTodoTask.Status;
 
                 await _context.SaveChangesAsync();
-                responce.Data = $"User with Id '{updatedTodoTask.Id}' updated!";
+                responce.Data = $"Todo with Id '{updatedTodoTask.Id}' updated!";
             }
             catch (Exception ex)
             {
