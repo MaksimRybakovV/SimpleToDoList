@@ -1,5 +1,8 @@
-﻿namespace Entities.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace Entities.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum TaskExecutionStatus
     {
         New,
