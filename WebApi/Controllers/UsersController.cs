@@ -1,4 +1,5 @@
-﻿using Entities.Dtos.UserDtos;
+﻿using Asp.Versioning;
+using Entities.Dtos.UserDtos;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services.UserService;
@@ -6,6 +7,7 @@ using WebApi.Services.UserService;
 namespace WebApi.Controllers
 {
     [ApiController]
+    [ApiVersion(1.0)]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {

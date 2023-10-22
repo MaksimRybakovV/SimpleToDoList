@@ -1,4 +1,5 @@
-﻿using Entities.Dtos.TodoTaskDtos;
+﻿using Asp.Versioning;
+using Entities.Dtos.TodoTaskDtos;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services.TodoTaskService;
@@ -6,6 +7,7 @@ using WebApi.Services.TodoTaskService;
 namespace WebApi.Controllers
 {
     [ApiController]
+    [ApiVersion(1.0)]
     public class TodoTasksController : ControllerBase
     {
         private readonly ITodoTaskService _service;
