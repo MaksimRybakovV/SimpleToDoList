@@ -1,5 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using WebApi.Data;
@@ -50,6 +51,14 @@ namespace WebApi
                 };
             });
 
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/TodoAppLog.txt",
+                    rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -62,7 +71,7 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseSerilogRequestLogging();
 
             app.MapControllers();
 

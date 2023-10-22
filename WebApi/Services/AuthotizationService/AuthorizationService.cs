@@ -11,11 +11,12 @@ using WebApi.Data;
 
 namespace WebApi.Services.AuthotizationService
 {
-    public class AuthorizationService : BaseService, IAuthorizationService
+    public class AuthorizationService : BaseService<User>, IAuthorizationService
     {
         private readonly IConfiguration _configuration;
 
-        public AuthorizationService(DataContext context, IMapper mapper, IConfiguration configuration) : base(context, mapper) 
+        public AuthorizationService(DataContext context, IMapper mapper, ILogger<User> logger, IConfiguration configuration) 
+            : base(context, mapper, logger) 
         {
             _configuration = configuration;
         }
@@ -43,6 +44,7 @@ namespace WebApi.Services.AuthotizationService
                 await _context.SaveChangesAsync();
 
                 responce.Data = _mapper.Map<GetUserDto>(user);
+                _logger.LogInformation("A user with the username {authUser.Username} logged in.", authUser.Username);
             }
             catch (Exception ex)
             {
@@ -69,6 +71,7 @@ namespace WebApi.Services.AuthotizationService
                 await _context.SaveChangesAsync();
 
                 responce.Data = _mapper.Map<GetUserDto>(user);
+                _logger.LogInformation("A user with the username {user.Username} logged out.", user.Username);
             }
             catch (Exception ex)
             {

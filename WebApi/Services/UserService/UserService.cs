@@ -6,9 +6,9 @@ using WebApi.Data;
 
 namespace WebApi.Services.UserService
 {
-    public class UserService : BaseService, IUserService
+    public class UserService : BaseService<User>, IUserService
     {
-        public UserService(DataContext context, IMapper mapper) : base(context, mapper) { }
+        public UserService(DataContext context, IMapper mapper, ILogger<User> logger) : base(context, mapper, logger) { }
 
         public async Task<ServiceResponce<int>> AddUserAsync(AddUserDto newUser)
         {
@@ -27,11 +27,13 @@ namespace WebApi.Services.UserService
                     .Max(u => u.Id);
 
                 responce.Data = user;
+                _logger.LogInformation("The user was created with the values {@newUser}. New user's ID is {user}", newUser, user);
             }
             else
             {
                 responce.IsSuccessful = false;
                 responce.Message = "A user with the same name already exists.";
+                _logger.LogError("Failed registration attempt. A user with the username {newUser.Username} exists.", newUser.Username);
             }
 
             return responce;
@@ -50,11 +52,13 @@ namespace WebApi.Services.UserService
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
                 responce.Data = $"User with Id '{id}' deleted!";
+                _logger.LogInformation("The user with ID '{id}' has been deleted.", id);
             }
             catch (Exception ex)
             {
                 responce.IsSuccessful = false;
                 responce.Message = ex.Message;
+                _logger.LogError("The user with ID '{id}' not found.", id);
             }
 
             return responce;
@@ -147,11 +151,14 @@ namespace WebApi.Services.UserService
                 }
 
                 responce.Data = $"User with Id '{updatedUser.Id}' updated!";
+                _logger.LogInformation("The user with ID '{updatedUser.Id}' has been updated " +
+                    "with values {@updatedUser}.", updatedUser.Id, updatedUser);
             }
             catch (Exception ex)
             {
                 responce.IsSuccessful = false;
                 responce.Message = ex.Message;
+                _logger.LogError("The user with ID '{updatedCustomer.Id}' not found.", updatedUser.Id);
             }
 
             return responce;

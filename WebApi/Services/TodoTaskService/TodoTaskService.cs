@@ -6,9 +6,9 @@ using WebApi.Data;
 
 namespace WebApi.Services.TodoTaskService
 {
-    public class TodoTaskService : BaseService, ITodoTaskService
+    public class TodoTaskService : BaseService<TodoTask>, ITodoTaskService
     {
-        public TodoTaskService(DataContext context, IMapper mapper) : base(context, mapper) { }
+        public TodoTaskService(DataContext context, IMapper mapper, ILogger<TodoTask> logger) : base(context, mapper, logger) { }
 
         public async Task<ServiceResponce<int>> AddTodoAsync(AddTodoTaskDto newTodoTask, int userId)
         {
@@ -28,11 +28,13 @@ namespace WebApi.Services.TodoTaskService
                     .MaxAsync(t => t.Id);
 
                 responce.Data = task;
+                _logger.LogInformation("The task was created with the values {@newTodoTask}. The task belongs to a user with ID {id}.", newTodoTask, userId);
             }
             catch (Exception ex)
             {
                 responce.IsSuccessful = false;
                 responce.Message = ex.Message;
+                _logger.LogError("The user with ID '{userId}' not found.", userId);
             }
 
             return responce;
@@ -51,11 +53,13 @@ namespace WebApi.Services.TodoTaskService
                 _context.TodoTasks.Remove(todo);
                 await _context.SaveChangesAsync();
                 responce.Data = $"Task with Id '{id}' deleted!";
+                _logger.LogInformation("The task with ID '{id}' has been deleted.", id);
             }
             catch (Exception ex)
             {
                 responce.IsSuccessful = false;
                 responce.Message = ex.Message;
+                _logger.LogError("The task with ID '{id}' not found.", id);
             }
 
             return responce;
@@ -205,11 +209,14 @@ namespace WebApi.Services.TodoTaskService
 
                 await _context.SaveChangesAsync();
                 responce.Data = $"Todo with Id '{updatedTodoTask.Id}' updated!";
+                _logger.LogInformation("The task with ID '{updatedTodoTask.Id}' has been updated " +
+                    "with values {@updatedTodoTask}.", updatedTodoTask.Id, updatedTodoTask);
             }
             catch (Exception ex)
             {
                 responce.IsSuccessful = false;
                 responce.Message = ex.Message;
+                _logger.LogError("The task with ID '{updatedTodoTask.Id}' not found.", updatedTodoTask.Id);
             }
 
             return responce;
