@@ -1,6 +1,6 @@
 ﻿namespace Entities.Models
 {
-    public class PageServiceResponce<T>
+    public class PageServiceResponse<T>
     {
         public int CurrentPage { get; set; } = 1;
         public int PageCount { get; set; }
