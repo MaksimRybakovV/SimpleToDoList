@@ -10,9 +10,9 @@ namespace WebApi.Services.TodoTaskService
     {
         public TodoTaskService(DataContext context, IMapper mapper, ILogger<TodoTask> logger) : base(context, mapper, logger) { }
 
-        public async Task<ServiceResponce<int>> AddTodoAsync(AddTodoTaskDto newTodoTask, int userId)
+        public async Task<ServiceResponse<int>> AddTodoAsync(AddTodoTaskDto newTodoTask, int userId)
         {
-            var responce = new ServiceResponce<int>();
+            var response = new ServiceResponse<int>();
 
             try
             {
@@ -27,22 +27,22 @@ namespace WebApi.Services.TodoTaskService
                 var task = await _context.TodoTasks
                     .MaxAsync(t => t.Id);
 
-                responce.Data = task;
+                response.Data = task;
                 _logger.LogInformation("The task was created with the values {@newTodoTask}. The task belongs to a user with ID {id}.", newTodoTask, userId);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
                 _logger.LogError("The user with ID '{userId}' not found.", userId);
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<string>> DeleteTodoAsync(int id)
+        public async Task<ServiceResponse<string>> DeleteTodoAsync(int id)
         {
-            var responce = new ServiceResponce<string>();
+            var response = new ServiceResponse<string>();
 
             try
             {
@@ -52,33 +52,33 @@ namespace WebApi.Services.TodoTaskService
 
                 _context.TodoTasks.Remove(todo);
                 await _context.SaveChangesAsync();
-                responce.Data = $"Task with Id '{id}' deleted!";
+                response.Data = $"Task with Id '{id}' deleted!";
                 _logger.LogInformation("The task with ID '{id}' has been deleted.", id);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
                 _logger.LogError("The task with ID '{id}' not found.", id);
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<List<GetTodoTaskDto>>> GetAllTodosAsync()
+        public async Task<ServiceResponse<List<GetTodoTaskDto>>> GetAllTodosAsync()
         {
-            var responce = new ServiceResponce<List<GetTodoTaskDto>>();
+            var response = new ServiceResponse<List<GetTodoTaskDto>>();
 
-            responce.Data = await _context.TodoTasks
+            response.Data = await _context.TodoTasks
                 .Select(t => _mapper.Map<GetTodoTaskDto>(t))
                 .ToListAsync();
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<List<GetTodoTaskDto>>> GetAllUsersTodosAsync(int userId)
+        public async Task<ServiceResponse<List<GetTodoTaskDto>>> GetAllUsersTodosAsync(int userId)
         {
-            var responce = new ServiceResponce<List<GetTodoTaskDto>>();
+            var response = new ServiceResponse<List<GetTodoTaskDto>>();
 
             try
             {
@@ -86,23 +86,23 @@ namespace WebApi.Services.TodoTaskService
                     .SingleOrDefaultAsync(u => u.Id == userId)
                     ?? throw new Exception($"User with Id '{userId}' not found!");
 
-                responce.Data = await _context.TodoTasks
+                response.Data = await _context.TodoTasks
                     .Where(t => t.UserId == userId) 
                     .Select(t => _mapper.Map<GetTodoTaskDto>(t))
                     .ToListAsync();
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<GetTodoTaskDto>> GetTodoByIdAsync(int id)
+        public async Task<ServiceResponse<GetTodoTaskDto>> GetTodoByIdAsync(int id)
         {
-            var responce = new ServiceResponce<GetTodoTaskDto>();
+            var response = new ServiceResponse<GetTodoTaskDto>();
 
             try
             {
@@ -110,20 +110,20 @@ namespace WebApi.Services.TodoTaskService
                     .SingleOrDefaultAsync(u => u.Id == id)
                     ?? throw new Exception($"Todo with Id '{id}' not found!");
 
-                responce.Data = _mapper.Map<GetTodoTaskDto>(todo);
+                response.Data = _mapper.Map<GetTodoTaskDto>(todo);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<PageServiceResponce<List<GetTodoTaskDto>>> GetTodosByPageAsync(int page, int pageSize)
+        public async Task<PageServiceResponse<List<GetTodoTaskDto>>> GetTodosByPageAsync(int page, int pageSize)
         {
-            var responce = new PageServiceResponce<List<GetTodoTaskDto>>();
+            var response = new PageServiceResponse<List<GetTodoTaskDto>>();
 
             try
             {
@@ -138,22 +138,22 @@ namespace WebApi.Services.TodoTaskService
                     .Select(t => _mapper.Map<GetTodoTaskDto>(t))
                     .ToListAsync();
 
-                responce.Data = todos;
-                responce.CurrentPage = page;
-                responce.PageCount = (int)pageCount;
+                response.Data = todos;
+                response.CurrentPage = page;
+                response.PageCount = (int)pageCount;
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<PageServiceResponce<List<GetTodoTaskDto>>> GetUsersTodosByPageAsync(int userId, int page, int pageSize)
+        public async Task<PageServiceResponse<List<GetTodoTaskDto>>> GetUsersTodosByPageAsync(int userId, int page, int pageSize)
         {
-            var responce = new PageServiceResponce<List<GetTodoTaskDto>>();
+            var response = new PageServiceResponse<List<GetTodoTaskDto>>();
 
             try
             {
@@ -176,22 +176,22 @@ namespace WebApi.Services.TodoTaskService
                     .Select(t => _mapper.Map<GetTodoTaskDto>(t))
                     .ToListAsync();
 
-                responce.Data = todos;
-                responce.CurrentPage = page;
-                responce.PageCount = (int)pageCount;
+                response.Data = todos;
+                response.CurrentPage = page;
+                response.PageCount = (int)pageCount;
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<string>> UpdateTodoAsync(UpdateTodoTaskDto updatedTodoTask)
+        public async Task<ServiceResponse<string>> UpdateTodoAsync(UpdateTodoTaskDto updatedTodoTask)
         {
-            var responce = new ServiceResponce<string>();
+            var response = new ServiceResponse<string>();
 
             try
             {
@@ -208,18 +208,18 @@ namespace WebApi.Services.TodoTaskService
                 todo.Status = updatedTodoTask.Status;
 
                 await _context.SaveChangesAsync();
-                responce.Data = $"Todo with Id '{updatedTodoTask.Id}' updated!";
+                response.Data = $"Todo with Id '{updatedTodoTask.Id}' updated!";
                 _logger.LogInformation("The task with ID '{updatedTodoTask.Id}' has been updated " +
                     "with values {@updatedTodoTask}.", updatedTodoTask.Id, updatedTodoTask);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
                 _logger.LogError("The task with ID '{updatedTodoTask.Id}' not found.", updatedTodoTask.Id);
             }
 
-            return responce;
+            return response;
         }
     }
 }

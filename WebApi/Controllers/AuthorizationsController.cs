@@ -20,38 +20,38 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("login")]
-        public async Task<ActionResult<ServiceResponce<GetUserDto>>> Login(AuthUserDto request)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Login(AuthUserDto request)
         {
-            var responce = await _service.GetUserByAuthAsync(request);
+            var response = await _service.GetUserByAuthAsync(request);
 
-            if (responce.Data is null)
-                return BadRequest(responce);
+            if (response.Data is null)
+                return BadRequest(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("refreshtoken")]
-        public async Task<ActionResult<ServiceResponce<GetUserDto>>> RefreshToken(TokenUserDto user)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> RefreshToken(TokenUserDto user)
         {
-            var responce = await _service.RefreshTokenAsync(user);
+            var response = await _service.RefreshTokenAsync(user);
 
-            if (responce.Data is null)
-                return Unauthorized(responce);
+            if (response.Data is null)
+                return Unauthorized(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("logout")]
-        public async Task<ActionResult<ServiceResponce<GetUserDto>>> Logout(int id)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Logout(int id)
         {
-            var responce = await _service.ClearTokenAsync(id);
+            var response = await _service.ClearTokenAsync(id);
 
-            if (responce.Data is null)
-                return Unauthorized(responce);
+            if (response.Data is null)
+                return Unauthorized(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
     }
 }

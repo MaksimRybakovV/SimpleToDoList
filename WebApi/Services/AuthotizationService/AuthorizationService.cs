@@ -21,9 +21,9 @@ namespace WebApi.Services.AuthotizationService
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponce<GetUserDto>> GetUserByAuthAsync(AuthUserDto authUser)
+        public async Task<ServiceResponse<GetUserDto>> GetUserByAuthAsync(AuthUserDto authUser)
         {
-            var responce = new ServiceResponce<GetUserDto>();
+            var response = new ServiceResponse<GetUserDto>();
 
             try
             {
@@ -43,21 +43,21 @@ namespace WebApi.Services.AuthotizationService
 
                 await _context.SaveChangesAsync();
 
-                responce.Data = _mapper.Map<GetUserDto>(user);
+                response.Data = _mapper.Map<GetUserDto>(user);
                 _logger.LogInformation("A user with the username {authUser.Username} logged in.", authUser.Username);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<GetUserDto>> ClearTokenAsync(int id)
+        public async Task<ServiceResponse<GetUserDto>> ClearTokenAsync(int id)
         {
-            var responce = new ServiceResponce<GetUserDto>();
+            var response = new ServiceResponse<GetUserDto>();
 
             try
             {
@@ -70,21 +70,21 @@ namespace WebApi.Services.AuthotizationService
 
                 await _context.SaveChangesAsync();
 
-                responce.Data = _mapper.Map<GetUserDto>(user);
+                response.Data = _mapper.Map<GetUserDto>(user);
                 _logger.LogInformation("A user with the username {user.Username} logged out.", user.Username);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<GetUserDto>> RefreshTokenAsync(TokenUserDto user)
+        public async Task<ServiceResponse<GetUserDto>> RefreshTokenAsync(TokenUserDto user)
         {
-            var responce = new ServiceResponce<GetUserDto>();
+            var response = new ServiceResponse<GetUserDto>();
 
             try
             {
@@ -109,15 +109,15 @@ namespace WebApi.Services.AuthotizationService
 
                 await _context.SaveChangesAsync();
 
-                responce.Data = _mapper.Map<GetUserDto>(requestedUser);
+                response.Data = _mapper.Map<GetUserDto>(requestedUser);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             } 
 
-            return responce;
+            return response;
         }
 
         private void SetRefreshToken(RefreshToken refreshToken, User user)

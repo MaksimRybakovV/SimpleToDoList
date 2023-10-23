@@ -5,8 +5,8 @@ namespace WebApi.Services.AuthotizationService
 {
     public interface IAuthorizationService
     {
-        public Task<ServiceResponce<GetUserDto>> GetUserByAuthAsync(AuthUserDto authUser);
-        public Task<ServiceResponce<GetUserDto>> ClearTokenAsync(int id);
-        public Task<ServiceResponce<GetUserDto>> RefreshTokenAsync(TokenUserDto user);
+        public Task<ServiceResponse<GetUserDto>> GetUserByAuthAsync(AuthUserDto authUser);
+        public Task<ServiceResponse<GetUserDto>> ClearTokenAsync(int id);
+        public Task<ServiceResponse<GetUserDto>> RefreshTokenAsync(TokenUserDto user);
     }
 }

@@ -19,68 +19,68 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponce<List<GetUserDto>>>> GetAll()
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> GetAll()
         {
             return await _service.GetAllUsersAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<ServiceResponce<GetUserDto>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)
         {
-            var responce = await _service.GetUserByIdAsync(id);
+            var response = await _service.GetUserByIdAsync(id);
 
-            if(responce.Data is null)
-                return NotFound(responce);
+            if(response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpGet]
         [Route("pagination")]
-        public async Task<ActionResult<PageServiceResponce<List<GetUserDto>>>> GetPage([FromQuery]int page, [FromQuery]int pageSize)
+        public async Task<ActionResult<PageServiceResponse<List<GetUserDto>>>> GetPage([FromQuery]int page, [FromQuery]int pageSize)
         {
-            var responce = await _service.GetUserByPageAsync(page, pageSize);
+            var response = await _service.GetUserByPageAsync(page, pageSize);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponce<int>>> PostUser(AddUserDto newUser)
+        public async Task<ActionResult<ServiceResponse<int>>> PostUser(AddUserDto newUser)
         {
-            var responce = await _service.AddUserAsync(newUser);
+            var response = await _service.AddUserAsync(newUser);
 
-            if (responce.Data == 0)
-                return NotFound(responce);
+            if (response.Data == 0)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<ServiceResponce<string>>> UpdateUser(UpdateUserDto updatedUser)
+        public async Task<ActionResult<ServiceResponse<string>>> UpdateUser(UpdateUserDto updatedUser)
         {
-            var responce = await _service.UpdateUserAsync(updatedUser);
+            var response = await _service.UpdateUserAsync(updatedUser);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<ServiceResponce<string>>> DeleteUser(int id)
+        public async Task<ActionResult<ServiceResponse<string>>> DeleteUser(int id)
         {
-            var responce = await _service.DeleteUserAsync(id);
+            var response = await _service.DeleteUserAsync(id);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
     }
 }

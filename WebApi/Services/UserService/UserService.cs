@@ -10,9 +10,9 @@ namespace WebApi.Services.UserService
     {
         public UserService(DataContext context, IMapper mapper, ILogger<User> logger) : base(context, mapper, logger) { }
 
-        public async Task<ServiceResponce<int>> AddUserAsync(AddUserDto newUser)
+        public async Task<ServiceResponse<int>> AddUserAsync(AddUserDto newUser)
         {
-            var responce = new ServiceResponce<int>();
+            var response = new ServiceResponse<int>();
             var oldUser = await _context.Users
                 .SingleOrDefaultAsync(u => u.Username == newUser.Username);
 
@@ -26,22 +26,22 @@ namespace WebApi.Services.UserService
                 var user = _context.Users
                     .Max(u => u.Id);
 
-                responce.Data = user;
+                response.Data = user;
                 _logger.LogInformation("The user was created with the values {@newUser}. New user's ID is {user}", newUser, user);
             }
             else
             {
-                responce.IsSuccessful = false;
-                responce.Message = "A user with the same name already exists.";
+                response.IsSuccessful = false;
+                response.Message = "A user with the same name already exists.";
                 _logger.LogError("Failed registration attempt. A user with the username {newUser.Username} exists.", newUser.Username);
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<string>> DeleteUserAsync(int id)
+        public async Task<ServiceResponse<string>> DeleteUserAsync(int id)
         {
-            var responce = new ServiceResponce<string>();
+            var response = new ServiceResponse<string>();
 
             try
             {
@@ -51,33 +51,33 @@ namespace WebApi.Services.UserService
 
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
-                responce.Data = $"User with Id '{id}' deleted!";
+                response.Data = $"User with Id '{id}' deleted!";
                 _logger.LogInformation("The user with ID '{id}' has been deleted.", id);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
                 _logger.LogError("The user with ID '{id}' not found.", id);
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<List<GetUserDto>>> GetAllUsersAsync()
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsersAsync()
         {
-            var responce = new ServiceResponce<List<GetUserDto>>();
+            var response = new ServiceResponse<List<GetUserDto>>();
 
-            responce.Data = await _context.Users
+            response.Data = await _context.Users
                 .Select(u => _mapper.Map<GetUserDto>(u))
                 .ToListAsync();
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<GetUserDto>> GetUserByIdAsync(int id)
+        public async Task<ServiceResponse<GetUserDto>> GetUserByIdAsync(int id)
         {
-            var responce = new ServiceResponce<GetUserDto>();
+            var response = new ServiceResponse<GetUserDto>();
 
             try
             {
@@ -85,20 +85,20 @@ namespace WebApi.Services.UserService
                     .SingleOrDefaultAsync(u => u.Id == id)
                     ?? throw new Exception($"User with Id '{id}' not found!");
 
-                responce.Data = _mapper.Map<GetUserDto>(user);
+                response.Data = _mapper.Map<GetUserDto>(user);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<PageServiceResponce<List<GetUserDto>>> GetUserByPageAsync(int page, int pageSize)
+        public async Task<PageServiceResponse<List<GetUserDto>>> GetUserByPageAsync(int page, int pageSize)
         {
-            var responce = new PageServiceResponce<List<GetUserDto>>();
+            var response = new PageServiceResponse<List<GetUserDto>>();
 
             try
             {
@@ -113,22 +113,22 @@ namespace WebApi.Services.UserService
                     .Select(u => _mapper.Map<GetUserDto>(u))
                     .ToListAsync();
 
-                responce.Data = users;
-                responce.CurrentPage = page;
-                responce.PageCount = (int)pageCount;
+                response.Data = users;
+                response.CurrentPage = page;
+                response.PageCount = (int)pageCount;
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
             }
 
-            return responce;
+            return response;
         }
 
-        public async Task<ServiceResponce<string>> UpdateUserAsync(UpdateUserDto updatedUser)
+        public async Task<ServiceResponse<string>> UpdateUserAsync(UpdateUserDto updatedUser)
         {
-            var responce = new ServiceResponce<string>();
+            var response = new ServiceResponse<string>();
 
             try
             {
@@ -150,18 +150,18 @@ namespace WebApi.Services.UserService
                     throw new Exception("A user with the same name already exists.");
                 }
 
-                responce.Data = $"User with Id '{updatedUser.Id}' updated!";
+                response.Data = $"User with Id '{updatedUser.Id}' updated!";
                 _logger.LogInformation("The user with ID '{updatedUser.Id}' has been updated " +
                     "with values {@updatedUser}.", updatedUser.Id, updatedUser);
             }
             catch (Exception ex)
             {
-                responce.IsSuccessful = false;
-                responce.Message = ex.Message;
+                response.IsSuccessful = false;
+                response.Message = ex.Message;
                 _logger.LogError("The user with ID '{updatedCustomer.Id}' not found.", updatedUser.Id);
             }
 
-            return responce;
+            return response;
         }
     }
 }

@@ -19,93 +19,93 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("api/Users/[controller]")]
-        public async Task<ActionResult<ServiceResponce<List<GetTodoTaskDto>>>> GetAll()
+        public async Task<ActionResult<ServiceResponse<List<GetTodoTaskDto>>>> GetAll()
         {
             return Ok(await _service.GetAllTodosAsync());
         }
 
         [HttpGet]
         [Route("api/Users/[controller]/{id}")]
-        public async Task<ActionResult<ServiceResponce<GetTodoTaskDto>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetTodoTaskDto>>> GetSingle(int id)
         {
-            var responce = await _service.GetTodoByIdAsync(id);
+            var response = await _service.GetTodoByIdAsync(id);
             
-            if(responce.Data is null)
-                return NotFound(responce);
+            if(response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpGet]
         [Route("api/Users/[controller]/pagination")]
-        public async Task<ActionResult<PageServiceResponce<List<GetTodoTaskDto>>>> GetPage([FromQuery]int page, [FromQuery]int pageSize)
+        public async Task<ActionResult<PageServiceResponse<List<GetTodoTaskDto>>>> GetPage([FromQuery]int page, [FromQuery]int pageSize)
         {
-            var responce = await _service.GetTodosByPageAsync(page, pageSize);
+            var response = await _service.GetTodosByPageAsync(page, pageSize);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpGet]
         [Route("api/Users/{id}/[controller]")]
-        public async Task<ActionResult<ServiceResponce<List<GetTodoTaskDto>>>> GetAllByUsers(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetTodoTaskDto>>>> GetAllByUsers(int id)
         {
-            var responce = await _service.GetAllUsersTodosAsync(id);
+            var response = await _service.GetAllUsersTodosAsync(id);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpGet]
         [Route("api/Users/{id}/[controller]/pagination")]
-        public async Task<ActionResult<ServiceResponce<List<GetTodoTaskDto>>>> GetPageByUser(int id, [FromQuery]int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<ServiceResponse<List<GetTodoTaskDto>>>> GetPageByUser(int id, [FromQuery]int page, [FromQuery] int pageSize)
         {
-            var responce = await _service.GetUsersTodosByPageAsync(id, page, pageSize);
+            var response = await _service.GetUsersTodosByPageAsync(id, page, pageSize);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("api/Users/[controller]")]
-        public async Task<ActionResult<ServiceResponce<int>>> PostTask(AddTodoTaskDto newTodoTask, [FromQuery]int id)
+        public async Task<ActionResult<ServiceResponse<int>>> PostTask(AddTodoTaskDto newTodoTask, [FromQuery]int id)
         {
-            var responce = await _service.AddTodoAsync(newTodoTask, id);
+            var response = await _service.AddTodoAsync(newTodoTask, id);
 
-            if (responce.Data == 0)
-                return NotFound(responce);
+            if (response.Data == 0)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("api/Users/[controller]/{id}")]
-        public async Task<ActionResult<ServiceResponce<string>>> UpdateTask(UpdateTodoTaskDto updatedTodoTask)
+        public async Task<ActionResult<ServiceResponse<string>>> UpdateTask(UpdateTodoTaskDto updatedTodoTask)
         {
-            var responce = await _service.UpdateTodoAsync(updatedTodoTask);
+            var response = await _service.UpdateTodoAsync(updatedTodoTask);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("api/Users/[controller]/{id}")]
-        public async Task<ActionResult<ServiceResponce<string>>> DeleteTask(int id)
+        public async Task<ActionResult<ServiceResponse<string>>> DeleteTask(int id)
         {
-            var responce = await _service.DeleteTodoAsync(id);
+            var response = await _service.DeleteTodoAsync(id);
 
-            if (responce.Data is null)
-                return NotFound(responce);
+            if (response.Data is null)
+                return NotFound(response);
 
-            return Ok(responce);
+            return Ok(response);
         }
     }
 }
