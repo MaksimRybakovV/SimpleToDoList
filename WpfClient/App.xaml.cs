@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Windows;
+using System.Windows.Controls;
+using WpfClient.Services.NavigationService;
 
 namespace WpfClient
 {
@@ -17,6 +20,9 @@ namespace WpfClient
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<MainWindow>();
+
+                    services.AddSingleton<INavigationService<UserControl>, ViewNavigationService>();
+                    services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControl => (UserControl)serviceProvider.GetRequiredService(userControl));
                 })
                 .Build();
         }
