@@ -21,17 +21,17 @@ namespace WebApi.Services.AuthotizationService
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<GetUserDto>> GetUserByAuthAsync(AuthUserDto authUser)
+        public async Task<ServiceResponse<GetUserDto>> GetUserByAuthAsync(string username, string passwordHash)
         {
             var response = new ServiceResponse<GetUserDto>();
 
             try
             {
                 var user = await _context.Users
-                    .SingleOrDefaultAsync(u => u.Username == authUser.Username)
+                    .SingleOrDefaultAsync(u => u.Username == username)
                     ?? throw new Exception("The user does not exist or the password is incorrect.");
 
-                if(user.PasswordHash != authUser.PasswordHash)
+                if(user.PasswordHash != passwordHash)
                     throw new Exception("The user does not exist or the password is incorrect.");
 
                 var token = CreateToken(user);
@@ -44,7 +44,7 @@ namespace WebApi.Services.AuthotizationService
                 await _context.SaveChangesAsync();
 
                 response.Data = _mapper.Map<GetUserDto>(user);
-                _logger.LogInformation("A user with the username {authUser.Username} logged in.", authUser.Username);
+                _logger.LogInformation("A user with the username {authUser.Username} logged in.", username);
             }
             catch (Exception ex)
             {

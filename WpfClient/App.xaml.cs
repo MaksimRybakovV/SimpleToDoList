@@ -12,13 +12,17 @@ namespace WpfClient
     /// </summary>
     public partial class App : Application
     {
-        private IHost _host;
+        private readonly IHost _host;
 
         public App()
         {
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
+                    var serviceProvider = services.BuildServiceProvider();
+
+                    services.AddHttpClient();
+
                     services.AddSingleton<MainWindow>();
 
                     services.AddSingleton<INavigationService<UserControl>, ViewNavigationService>();
