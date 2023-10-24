@@ -21,9 +21,9 @@ namespace WpfClient.Services.WebService
         public async Task<ServiceResponse<GetUserDto>> Authorization(string username, string passwordHash)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            ConfigureClient(client, "https://localhost:7130/api/authorization/");
+            ConfigureClient(client, "https://localhost:7130/api/authorizations/");
 
-            var response = await client.GetStringAsync($"login?username={username}&passwordHash{passwordHash}");
+            var response = await client.GetStringAsync($"login?username={username}&passwordHash={passwordHash}");
             var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<GetUserDto>>(response);
             return deserealizedResponse!;
         }
@@ -31,7 +31,7 @@ namespace WpfClient.Services.WebService
         public async Task<ServiceResponse<GetUserDto>> Logout(int id, string token)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            ConfigureAuthClient(client, "https://localhost:7130/api/authorization/", token);
+            ConfigureAuthClient(client, "https://localhost:7130/api/authorizations/", token);
 
             var response = await client.PutAsJsonAsync("logout", id);
             var responseJson = await response.Content.ReadAsStringAsync();
@@ -53,7 +53,7 @@ namespace WpfClient.Services.WebService
         public async Task<ServiceResponse<int>> Registration(AddUserDto newUser)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            ConfigureClient(client, "https://localhost:7130/api/authorization/");
+            ConfigureClient(client, "https://localhost:7130/api/authorizations/");
 
             var response = await client.PostAsJsonAsync("login", newUser);
             var responseJson = await response.Content.ReadAsStringAsync();

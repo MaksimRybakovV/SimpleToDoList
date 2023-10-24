@@ -29,7 +29,7 @@ namespace WpfClient.Services.NavigationService
         {
             UserControl view = _viewFactory.Invoke(typeof(TView));
             CurrentView = view;
-            Application.Current.MainWindow.MinHeight = view.MinHeight;
+            Application.Current.MainWindow.MinHeight = view.MinHeight + 35;
             Application.Current.MainWindow.MinWidth = view.MinWidth;
         }
     }

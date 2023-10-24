@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Simple Todo List" 
+        Background="Transparent"
+        Height="{Binding Navigation.CurrentView.Height}" 
+        Width="{Binding Navigation.CurrentView.Width}">
     <Grid>
-
+        <ContentControl Content="{Binding Navigation.CurrentView}"/>
     </Grid>
 </Window>

@@ -3,7 +3,11 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using WpfClient.Services.AuthorizationService;
 using WpfClient.Services.NavigationService;
+using WpfClient.Services.WebService;
+using WpfClient.View.Windows;
+using WpfClient.ViewModel;
 
 namespace WpfClient
 {
@@ -23,10 +27,23 @@ namespace WpfClient
 
                     services.AddHttpClient();
 
-                    services.AddSingleton<MainWindow>();
+                    services.AddSingleton<AuthorizationViewModel>();
+                    services.AddSingleton<MainWindowViewModel>();
 
                     services.AddSingleton<INavigationService<UserControl>, ViewNavigationService>();
+                    services.AddSingleton<IAuthorizationService, AuthorizationService>();
+                    services.AddSingleton<IWebService, HttpWebService>();
                     services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControl => (UserControl)serviceProvider.GetRequiredService(userControl));
+
+                    services.AddSingleton((services) => new MainWindow()
+                    {
+                        DataContext = services.GetRequiredService<MainWindowViewModel>()
+                    });
+
+                    services.AddSingleton((services) => new AuthorizationView()
+                    {
+                        DataContext = services.GetRequiredService<AuthorizationViewModel>()
+                    });
                 })
                 .Build();
         }
