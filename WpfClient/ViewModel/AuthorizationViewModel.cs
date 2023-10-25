@@ -1,14 +1,11 @@
-﻿using Entities.Dtos.UserDtos;
-using Entities.Models;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WpfClient.Infrastructure.Commands;
 using WpfClient.Services.AuthorizationService;
 using WpfClient.Services.NavigationService;
 using WpfClient.Services.WebService;
+using WpfClient.View.Windows;
 using WpfClient.ViewModel.Base;
 
 namespace WpfClient.ViewModel
@@ -44,6 +41,7 @@ namespace WpfClient.ViewModel
 
         public ICommand AutorizationCommand { get; }
         public ICommand GetPasswordCommand { get; }
+        public ICommand SwitchToRegistrationCommand { get; }
 
         public AuthorizationViewModel(IWebService service, INavigationService<UserControl> navigation, IAuthorizationService authorization)
         {
@@ -53,6 +51,7 @@ namespace WpfClient.ViewModel
 
             AutorizationCommand = new RelayCommand(OnAutorizationCommand, CanAutorizationCommand);
             GetPasswordCommand = new RelayCommand(OnGetPasswordCommand, CanGetPasswordCommand);
+            SwitchToRegistrationCommand = new RelayCommand(OnSwitchToRegistrationCommand, CanSwitchToRegistrationCommand);
         }
 
         private bool CanAutorizationCommand(object parameter) => (Username != "" && Password != "");
@@ -76,6 +75,13 @@ namespace WpfClient.ViewModel
         {
             var passwordBox = parameter as PasswordBox;
             Password = passwordBox!.Password;
+        }
+
+        private bool CanSwitchToRegistrationCommand(object parameter) => true;
+
+        private void OnSwitchToRegistrationCommand(object parameter)
+        {
+            Navigation?.NavigateTo<RegistrationView>();
         }
     }
 }

@@ -18,6 +18,8 @@ namespace WebApi.Services.UserService
 
             if (oldUser is null)
             {
+                newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newUser.PasswordHash);
+
                 await _context.Users
                     .AddAsync(_mapper.Map<User>(newUser));
 

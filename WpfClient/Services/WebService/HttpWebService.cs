@@ -23,7 +23,7 @@ namespace WpfClient.Services.WebService
             using HttpClient client = _httpClientFactory.CreateClient();
             ConfigureClient(client, "https://localhost:7130/api/authorizations/");
 
-            HttpResponseMessage message = await client.GetAsync($"login?username={username}&passwordHash={passwordHash}");
+            HttpResponseMessage message = await client.GetAsync($"login?username={username}&password={passwordHash}");
             var responseJson = await message.Content.ReadAsStringAsync();
             var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<GetUserDto>>(responseJson);
             return deserealizedResponse!;
@@ -54,9 +54,9 @@ namespace WpfClient.Services.WebService
         public async Task<ServiceResponse<int>> Registration(AddUserDto newUser)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            ConfigureClient(client, "https://localhost:7130/api/authorizations/");
+            ConfigureClient(client, "https://localhost:7130/api/");
 
-            var response = await client.PostAsJsonAsync("login", newUser);
+            var response = await client.PostAsJsonAsync("users", newUser);
             var responseJson = await response.Content.ReadAsStringAsync();
             var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<int>>(responseJson);
             return deserealizedResponse!;

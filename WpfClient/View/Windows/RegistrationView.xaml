@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WpfClient.View.Windows.AuthorizationView"
+﻿<UserControl x:Class="WpfClient.View.Windows.RegistrationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,7 +14,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
-            <RowDefinition/>
+            <RowDefinition Height="0.6*"/>
             <RowDefinition/>
             <RowDefinition Height="0.4*"/>
             <RowDefinition Height="0.2*"/>
@@ -29,23 +29,16 @@
         <StackPanel Grid.Row="1"
                     Grid.Column="1">
             <Viewbox Margin="0,40,0,10">
-                <TextBlock Text="Simple todo list" 
+                <TextBlock Text="Registration" 
                            Width="102"
                            TextAlignment="Center"
                            FontWeight="Heavy"/>
-            </Viewbox>
-
-            <Viewbox>
-                <TextBlock Text="Simple todo list is an application for managing your tasks."
-                           TextWrapping="Wrap" 
-                           Width="307"
-                           TextAlignment="Center"/>
             </Viewbox>
         </StackPanel>
 
         <Grid Grid.Row="2"
               Grid.Column="1"
-              Margin="125,10,125,10">
+              Margin="0,10,0,10">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.4*"/>
@@ -54,22 +47,30 @@
                 <RowDefinition/>
                 <RowDefinition Height="0.4*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-            <Viewbox Grid.Row="1">
+            <Viewbox Grid.Row="1"
+                     Grid.Column="0"
+                     Margin="10,0,10,0">
                 <StackPanel>
                     <TextBlock Text="Username" 
                                Width="190"
                                Margin="0,0,0,5"
                                TextAlignment="Left"/>
-                    
+
                     <TextBox Grid.Column="0"
                              Grid.ColumnSpan="2"
                              Width="190"
-                             Text="{Binding Username}"/>
+                             Text="{Binding NewUser.Username}"/>
                 </StackPanel>
             </Viewbox>
 
-            <Viewbox Grid.Row="3">
+            <Viewbox Grid.Row="3"
+                     Grid.Column="0"
+                     Margin="10,0,10,0">
                 <StackPanel>
                     <TextBlock Text="Password" 
                                Width="190"
@@ -88,6 +89,39 @@
                     </PasswordBox>
                 </StackPanel>
             </Viewbox>
+
+            <Viewbox Grid.Row="1"
+                     Grid.Column="1"
+                     Margin="10,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="First Name" 
+                               Width="190"
+                               Margin="0,0,0,5"
+                               TextAlignment="Left"/>
+
+                    <TextBox Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             Width="190"
+                             Text="{Binding NewUser.FirstName}"/>
+                </StackPanel>
+            </Viewbox>
+
+            <Viewbox Grid.Row="3"
+                     Grid.Column="1"
+                     Margin="10,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="Last Name" 
+                               Width="190"
+                               Margin="0,0,0,5"
+                               TextAlignment="Left"/>
+
+                    <TextBox Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             Width="190"
+                             Text="{Binding NewUser.LastName}">
+                    </TextBox>
+                </StackPanel>
+            </Viewbox>
         </Grid>
 
         <Viewbox Grid.Row="3"
@@ -97,14 +131,14 @@
                  VerticalAlignment="Center">
             <Button Width="100"
                     MaxHeight="50"
-                    Content="Log in"
+                    Content="Register"
                     Cursor="Hand"
-                    Command="{Binding AutorizationCommand}"/>
+                    Command="{Binding RegistrationCommand}"/>
         </Viewbox>
 
         <Viewbox Grid.Row="4"
                  Grid.Column="1">
-            <TextBlock Text="Create Account"
+            <TextBlock Text="Log in"
                        Cursor="Hand"
                        TextAlignment="Center" 
                        Height="30"
@@ -112,7 +146,7 @@
                 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SwitchToRegistrationCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding SwitchToAuthorizationCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBlock>

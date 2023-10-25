@@ -21,7 +21,7 @@ namespace WebApi.Services.AuthotizationService
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<GetUserDto>> GetUserByAuthAsync(string username, string passwordHash)
+        public async Task<ServiceResponse<GetUserDto>> GetUserByAuthAsync(string username, string password)
         {
             var response = new ServiceResponse<GetUserDto>();
 
@@ -31,7 +31,7 @@ namespace WebApi.Services.AuthotizationService
                     .SingleOrDefaultAsync(u => u.Username == username)
                     ?? throw new Exception("The user does not exist or the password is incorrect.");
 
-                if(user.PasswordHash != passwordHash)
+                if(!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
                     throw new Exception("The user does not exist or the password is incorrect.");
 
                 var token = CreateToken(user);

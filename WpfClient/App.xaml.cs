@@ -29,6 +29,7 @@ namespace WpfClient
 
                     services.AddSingleton<AuthorizationViewModel>();
                     services.AddSingleton<MainWindowViewModel>();
+                    services.AddSingleton<RegistrationViewModel>();
 
                     services.AddSingleton<INavigationService<UserControl>, ViewNavigationService>();
                     services.AddSingleton<IAuthorizationService, AuthorizationService>();
@@ -43,6 +44,11 @@ namespace WpfClient
                     services.AddSingleton((services) => new AuthorizationView()
                     {
                         DataContext = services.GetRequiredService<AuthorizationViewModel>()
+                    });
+
+                    services.AddSingleton((services) => new RegistrationView()
+                    {
+                        DataContext = services.GetRequiredService<RegistrationViewModel>()
                     });
                 })
                 .Build();

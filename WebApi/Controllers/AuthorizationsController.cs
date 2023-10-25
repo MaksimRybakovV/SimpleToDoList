@@ -20,9 +20,9 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("login")]
-        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Login([FromQuery]string username, [FromQuery]string passwordHash)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Login([FromQuery]string username, [FromQuery]string password)
         {
-            var response = await _service.GetUserByAuthAsync(username, passwordHash);
+            var response = await _service.GetUserByAuthAsync(username, password);
 
             if (response.Data is null)
                 return BadRequest(response);
