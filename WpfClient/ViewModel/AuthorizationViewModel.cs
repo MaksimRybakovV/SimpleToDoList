@@ -62,10 +62,12 @@ namespace WpfClient.ViewModel
             var response = await _service.Authorization(Username, Password);
 
             if (response.IsSuccessful == false)
+            {
                 MessageBox.Show(response?.Message);
+                return;
+            }  
 
             Authorization?.SetCurrentUser(response?.Data!);
-            MessageBox.Show(response?.Data?.ToString());
         }
 
         private bool CanGetPasswordCommand(object parameter) => true;

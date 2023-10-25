@@ -23,8 +23,9 @@ namespace WpfClient.Services.WebService
             using HttpClient client = _httpClientFactory.CreateClient();
             ConfigureClient(client, "https://localhost:7130/api/authorizations/");
 
-            var response = await client.GetStringAsync($"login?username={username}&passwordHash={passwordHash}");
-            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<GetUserDto>>(response);
+            HttpResponseMessage message = await client.GetAsync($"login?username={username}&passwordHash={passwordHash}");
+            var responseJson = await message.Content.ReadAsStringAsync();
+            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<GetUserDto>>(responseJson);
             return deserealizedResponse!;
         }
 
