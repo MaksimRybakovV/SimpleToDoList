@@ -105,6 +105,7 @@ namespace WebApi.Services.UserService
             try
             {
                 var pageCount = Math.Ceiling(_context.Users.Count() / (float)pageSize);
+                pageCount = Math.Max(pageCount, 1);
 
                 if (page > pageCount)
                     throw new Exception($"The page {page} does not exist. The maximum number of pages is {pageCount}.");

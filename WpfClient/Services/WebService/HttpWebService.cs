@@ -1,11 +1,14 @@
-﻿using Entities.Dtos.UserDtos;
+﻿using Entities.Dtos.TodoTaskDtos;
+using Entities.Dtos.UserDtos;
 using Entities.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace WpfClient.Services.WebService
 {
@@ -59,6 +62,17 @@ namespace WpfClient.Services.WebService
             var response = await client.PostAsJsonAsync("users", newUser);
             var responseJson = await response.Content.ReadAsStringAsync();
             var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<int>>(responseJson);
+            return deserealizedResponse!;
+        }
+
+        public async Task<ServiceResponse<List<GetTodoTaskDto>>> GetTasksPageByUser(int id, int page, int pageSize)
+        {
+            using HttpClient client = _httpClientFactory.CreateClient();
+            ConfigureClient(client, $"https://localhost:7130/api/users/{id}/todotasks/");
+
+            HttpResponseMessage message = await client.GetAsync($"pagination?page={page}&pageSize={pageSize}");
+            var responseJson = await message.Content.ReadAsStringAsync();
+            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<List<GetTodoTaskDto>>>(responseJson);
             return deserealizedResponse!;
         }
 

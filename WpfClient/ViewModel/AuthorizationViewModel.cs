@@ -67,6 +67,7 @@ namespace WpfClient.ViewModel
             }  
 
             Authorization?.SetCurrentUser(response?.Data!);
+            Navigation?.NavigateTo<TableView>();
         }
 
         private bool CanGetPasswordCommand(object parameter) => true;
