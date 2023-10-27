@@ -43,7 +43,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        [Route("logout")]
+        [Route("logout/{id}")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> Logout(int id)
         {
             var response = await _service.ClearTokenAsync(id);

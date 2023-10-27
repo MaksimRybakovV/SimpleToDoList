@@ -8,6 +8,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:enums="clr-namespace:Entities.Enums;assembly=Entities"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              Background="White"
              d:DesignHeight="540" 
@@ -30,6 +31,9 @@
                 <x:Type TypeName="enums:TaskExecutionStatus"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <Style TargetType="TextBlock" x:Key="WrapText">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
     </UserControl.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -57,7 +61,8 @@
                     <Button VerticalAlignment="Center"
                             HorizontalAlignment="Left" 
                             Height="25" 
-                            Width="25"/>
+                            Width="25"
+                            Command="{Binding LogoutCommand}"/>
                     <fa6:ImageAwesome Icon="Solid_RightFromBracket"
                                       Height="20" 
                                       Width="20"
@@ -70,10 +75,26 @@
                     <Button VerticalAlignment="Center"
                             HorizontalAlignment="Left" 
                             Height="25" 
-                            Width="25"/>
+                            Width="25"
+                            Command="{Binding ResetSelectedItemCommand}"
+                            CommandParameter="{Binding ElementName=table}"/>
                     <fa6:ImageAwesome Icon="Solid_ArrowLeft"
                                       Height="20" 
                                       Width="20"
+                                      IsHitTestVisible="False"/>
+                </Grid>
+            </Viewbox>
+            <Viewbox Margin="5,5,0,5"
+                     HorizontalAlignment="Left">
+                <Grid>
+                    <Button VerticalAlignment="Center"
+                            HorizontalAlignment="Left" 
+                            Height="25" 
+                            Width="25"
+                            Command="{Binding DeleteSelectedItemCommand}"/>
+                    <fa6:ImageAwesome Icon="Solid_Xmark"
+                                      Height="15" 
+                                      Width="15"
                                       IsHitTestVisible="False"/>
                 </Grid>
             </Viewbox>
@@ -90,35 +111,79 @@
                 <fa6:ImageAwesome Icon="Regular_User"/>
             </Viewbox>
             <Viewbox>
-                <TextBlock Text=""
+                <TextBlock Text="{Binding UserString}"
                            VerticalAlignment="Center"/>
             </Viewbox>
         </StackPanel>
 
-        <DataGrid Grid.Row="1"
+        <DataGrid x:Name="table"
+                  Grid.Row="1"
                   Grid.Column="1"
                   Margin="5"
                   Background="AliceBlue"
                   BorderBrush="Black"
                   BorderThickness="2"
                   AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserResizeColumns="False"
+                  CanUserResizeRows="False"
+                  CanUserReorderColumns="False"
                   ItemsSource="{Binding TasksPage}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SetSelectedItemCommand}" 
+                                           CommandParameter="{Binding ElementName=table, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Resources>
+                <Style TargetType="TextBlock" x:Key="WrapText">
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title"
+                                    TextBlock.FontSize="22"
                                     Binding="{Binding Title}"/>
-                <DataGridTextColumn Header="Description"
-                                    Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Notes"
-                                    Binding="{Binding Notes}"/>
+                <DataGridTemplateColumn Header="Description">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock FontSize="22"
+                                           Text="{Binding Description}" 
+                                           Width="150" 
+                                           Style="{StaticResource WrapText}"
+                                           TextAlignment="Left"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Notes">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock FontSize="22"
+                                           Text="{Binding Notes}" 
+                                           Width="150" 
+                                           Style="{StaticResource WrapText}"
+                                           TextAlignment="Left"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Creation"
+                                    TextBlock.FontSize="22"
                                     Binding="{Binding Creation}"/>
                 <DataGridTextColumn Header="Deadline"
+                                    TextBlock.FontSize="22"
                                     Binding="{Binding Deadline}"/>
                 <DataGridTextColumn Header="Category"
+                                    TextBlock.FontSize="22"
                                     Binding="{Binding Category}"/>
                 <DataGridTextColumn Header="Priority"
+                                    TextBlock.FontSize="22"
                                     Binding="{Binding Priority}"/>
                 <DataGridTextColumn Header="Status"
+                                    TextBlock.FontSize="22"
                                     Binding="{Binding Status}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -197,49 +262,74 @@
                          Grid.Column="1"
                          Margin="5">
                     <TextBox TextAlignment="Left" 
-                             Width="125"/>
+                             Width="125"
+                             Text="{Binding TaskLayout.Title}"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1"
                          Grid.Column="1"
                          Margin="5">
                     <TextBox TextAlignment="Left" 
-                             Width="125"/>
+                             Width="125"
+                             Text="{Binding TaskLayout.Description}"/>
                 </Viewbox>
                 <Viewbox Grid.Row="2"
                          Grid.Column="1"
                          Margin="5">
                     <TextBox TextAlignment="Left" 
-                             Width="125"/>
+                             Width="125"
+                             Text="{Binding TaskLayout.Notes}"/>
                 </Viewbox>
-                <Viewbox Grid.Row="3"
-                         Grid.Column="1"
-                         Margin="5">
-                    <DatePicker Width="125"/>
-                </Viewbox>
+                <Grid Grid.Row="3"
+                      Grid.Column="1"
+                      Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Viewbox Grid.Column="0">
+                        <DatePicker SelectedDate="{Binding Date}" 
+                                    Width="125"
+                                    SelectedDateFormat="Long"/>
+                    </Viewbox>
+                    <Viewbox Grid.Column="1">
+                        <materialDesign:TimePicker Width="125"
+                                                   SelectedTime="{Binding Time}"/>
+                    </Viewbox>
+                </Grid>
                 <Viewbox Grid.Row="4"
                          Grid.Column="1"
                          Margin="5">
                     <ComboBox Width="125"
-                              ItemsSource="{Binding Source={StaticResource TaskCategory}}"/>
+                              ItemsSource="{Binding Source={StaticResource TaskCategory}}"
+                              SelectedItem="{Binding TaskLayout.Category}"/>
                 </Viewbox>
                 <Viewbox Grid.Row="5"
                          Grid.Column="1"
                          Margin="5">
                     <ComboBox Width="125"
-                              ItemsSource="{Binding Source={StaticResource TaskPriority}}"/>
+                              ItemsSource="{Binding Source={StaticResource TaskPriority}}"
+                              SelectedItem="{Binding TaskLayout.Priority}"/>
                 </Viewbox>
                 <Viewbox Grid.Row="6"
                          Grid.Column="1"
                          Margin="5">
                     <ComboBox Width="125"
-                              ItemsSource="{Binding Source={StaticResource TaskExecutionStatus}}"/>
+                              ItemsSource="{Binding Source={StaticResource TaskExecutionStatus}}"
+                              SelectedItem="{Binding TaskLayout.Status}"/>
                 </Viewbox>
             </Grid>
         </Border>
         <Viewbox Grid.Column="0"
                  Grid.Row="2">
             <Button Margin="75,0,75,0"
-                    Content="Add/Update"/>
+                    Content="Add/Update">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding AddItemCommand}"/>
+                        <i:InvokeCommandAction  Command="{Binding UpdateItemCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
         </Viewbox>
 
         <StackPanel Grid.Column="1"
@@ -251,7 +341,8 @@
             <Viewbox Margin="5">
                 <Grid>
                     <Button Height="45" 
-                            Width="45"/>
+                            Width="45"
+                            Command="{Binding SwitchToFirstPageCommand}"/>
                     <fa6:ImageAwesome Icon="Solid_BackwardFast"
                                       Height="25" 
                                       Width="25"
@@ -261,7 +352,8 @@
             <Viewbox Margin="5">
                 <Grid>
                     <Button Height="45" 
-                            Width="45"/>
+                            Width="45"
+                            Command="{Binding SwitchToPrevPageCommand}"/>
                     <fa6:ImageAwesome Icon="Solid_BackwardStep"
                                       Height="25" 
                                       Width="25"
@@ -269,12 +361,13 @@
                 </Grid>
             </Viewbox>
             <Viewbox Margin="5">
-                <TextBlock Text="1 in 10"/>
+                <TextBlock Text="{Binding PageText}"/>
             </Viewbox>
             <Viewbox Margin="5">
                 <Grid>
                     <Button Height="45" 
-                            Width="45"/>
+                            Width="45"
+                            Command="{Binding SwitchToNextPageCommand}"/>
                     <fa6:ImageAwesome Icon="Solid_ForwardStep"
                                       Height="25" 
                                       Width="25"
@@ -284,7 +377,8 @@
             <Viewbox Margin="5">
                 <Grid>
                     <Button Height="45" 
-                            Width="45"/>
+                            Width="45"
+                            Command="{Binding SwitchToLastPageCommand}"/>
                     <fa6:ImageAwesome Icon="Solid_ForwardFast"
                                       Height="35" 
                                       Width="35"

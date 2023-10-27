@@ -64,8 +64,10 @@ namespace WpfClient.ViewModel
             {
                 MessageBox.Show(response?.Message);
                 return;
-            }  
+            }
 
+            var passwordBox = parameter as PasswordBox;
+            ClearTextBoxes(passwordBox!);
             Authorization?.SetCurrentUser(response?.Data!);
             Navigation?.NavigateTo<TableView>();
         }
@@ -82,7 +84,18 @@ namespace WpfClient.ViewModel
 
         private void OnSwitchToRegistrationCommand(object parameter)
         {
+            var passwordBox = parameter as PasswordBox;
+            ClearTextBoxes(passwordBox!);
             Navigation?.NavigateTo<RegistrationView>();
+        }
+
+        private void ClearTextBoxes(PasswordBox passwordBox)
+        {
+            passwordBox?.Clear();
+            Username = string.Empty; 
+            Password = string.Empty;
+            OnPropertyChanged(nameof(Username));
+            OnPropertyChanged(nameof(Password));
         }
     }
 }

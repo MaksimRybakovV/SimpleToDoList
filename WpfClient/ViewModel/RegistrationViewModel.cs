@@ -55,6 +55,8 @@ namespace WpfClient.ViewModel
                 return;
             }
 
+            var passwordBox = parameter as PasswordBox;
+            ClearTextBoxes(passwordBox!);
             MessageBox.Show("Registration was successful.");
             Navigation?.NavigateTo<AuthorizationView>();
         }
@@ -71,7 +73,16 @@ namespace WpfClient.ViewModel
 
         private void OnSwitchToAuthorizationCommand(object parameter)
         {
+            var passwordBox = parameter as PasswordBox;
+            ClearTextBoxes(passwordBox!);
             Navigation?.NavigateTo<AuthorizationView>();
+        }
+
+        private void ClearTextBoxes(PasswordBox passwordBox)
+        {
+            passwordBox?.Clear();
+            NewUser = new();
+            OnPropertyChanged(nameof(NewUser));
         }
     }
 }

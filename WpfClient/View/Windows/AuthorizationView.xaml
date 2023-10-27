@@ -99,7 +99,8 @@
                     MaxHeight="50"
                     Content="Log in"
                     Cursor="Hand"
-                    Command="{Binding AutorizationCommand}"/>
+                    Command="{Binding AutorizationCommand}"
+                    CommandParameter="{Binding ElementName=txtPassword}"/>
         </Viewbox>
 
         <Viewbox Grid.Row="4"
@@ -112,7 +113,8 @@
                 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding SwitchToRegistrationCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding SwitchToRegistrationCommand}"
+                                               CommandParameter="{Binding ElementName=txtPassword}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBlock>

@@ -37,7 +37,7 @@ namespace WpfClient.Services.WebService
             using HttpClient client = _httpClientFactory.CreateClient();
             ConfigureAuthClient(client, "https://localhost:7130/api/authorizations/", token);
 
-            var response = await client.PutAsJsonAsync("logout", id);
+            var response = await client.PutAsJsonAsync("logout/{id}", id);
             var responseJson = await response.Content.ReadAsStringAsync();
             var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<GetUserDto>>(responseJson);
             return deserealizedResponse!;
@@ -65,14 +65,47 @@ namespace WpfClient.Services.WebService
             return deserealizedResponse!;
         }
 
-        public async Task<ServiceResponse<List<GetTodoTaskDto>>> GetTasksPageByUser(int id, int page, int pageSize)
+        public async Task<PageServiceResponse<List<GetTodoTaskDto>>> GetTasksPageByUser(int id, int page, int pageSize, string token)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            ConfigureClient(client, $"https://localhost:7130/api/users/{id}/todotasks/");
+            ConfigureAuthClient(client, $"https://localhost:7130/api/users/{id}/todotasks/", token);
 
             HttpResponseMessage message = await client.GetAsync($"pagination?page={page}&pageSize={pageSize}");
             var responseJson = await message.Content.ReadAsStringAsync();
-            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<List<GetTodoTaskDto>>>(responseJson);
+            var deserealizedResponse = JsonConvert.DeserializeObject<PageServiceResponse<List<GetTodoTaskDto>>>(responseJson);
+            return deserealizedResponse!;
+        }
+
+        public async Task<ServiceResponse<string>> DeleteTask(int id, string token)
+        {
+            using HttpClient client = _httpClientFactory.CreateClient();
+            ConfigureAuthClient(client, $"https://localhost:7130/api/users/todotasks/", token);
+
+            var response = await client.DeleteAsync($"{id}");
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<string>>(responseJson);
+            return deserealizedResponse!;
+        }
+
+        public async Task<ServiceResponse<string>> UpdateTask(UpdateTodoTaskDto updatedTask, string token)
+        {
+            using HttpClient client = _httpClientFactory.CreateClient();
+            ConfigureAuthClient(client, $"https://localhost:7130/api/users/todotasks/", token);
+
+            var response = await client.PutAsJsonAsync($"{updatedTask.Id}", updatedTask);
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<string>>(responseJson);
+            return deserealizedResponse!;
+        }
+
+        public async Task<ServiceResponse<int>> AddTask(AddTodoTaskDto newTask, int id, string token)
+        {
+            using HttpClient client = _httpClientFactory.CreateClient();
+            ConfigureAuthClient(client, $"https://localhost:7130/api/users/todotasks/", token);
+
+            var response = await client.PostAsJsonAsync($"?id={id}", newTask);
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<int>>(responseJson);
             return deserealizedResponse!;
         }
 

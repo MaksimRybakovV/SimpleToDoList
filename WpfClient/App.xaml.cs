@@ -32,6 +32,8 @@ namespace WpfClient
                     services.AddSingleton<RegistrationViewModel>();
                     services.AddSingleton<TableViewModel>();
 
+                    services.AddAutoMapper(typeof(App).Assembly);
+
                     services.AddSingleton<INavigationService<UserControl>, ViewNavigationService>();
                     services.AddSingleton<IAuthorizationService, AuthorizationService>();
                     services.AddSingleton<IWebService, HttpWebService>();
