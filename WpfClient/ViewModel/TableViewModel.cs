@@ -303,11 +303,10 @@ namespace WpfClient.ViewModel
         {
             var currentUser = _mapper.Map<TokenUserDto>(Authorization!.CurrentUser);
             var response = await _service.RefreshToken(currentUser, Authorization.CurrentUser.Token);
-
             if (response.IsSuccessful == false)
             {
-                MessageBox.Show(response?.Message);
-                return;
+                MessageBox.Show("Due to long inactivity, reauthorization is required.");
+                Navigation!.NavigateTo<AuthorizationView>();
             }
 
             Authorization.SetCurrentUser(response.Data);
