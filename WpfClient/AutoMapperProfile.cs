@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities.Dtos.TodoTaskDtos;
+using Entities.Dtos.UserDtos;
 
 namespace WpfClient
 {
@@ -9,6 +10,7 @@ namespace WpfClient
         {
             CreateMap<GetTodoTaskDto, UpdateTodoTaskDto>();
             CreateMap<GetTodoTaskDto, AddTodoTaskDto>();
+            CreateMap<GetUserDto, TokenUserDto>();
         }
     }
 }

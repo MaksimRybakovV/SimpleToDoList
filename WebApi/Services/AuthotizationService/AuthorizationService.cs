@@ -94,7 +94,7 @@ namespace WebApi.Services.AuthotizationService
 
                 var refreshToken = user.RefreshToken;
 
-                if (user.RefreshToken.Equals(refreshToken))
+                if (!requestedUser.RefreshToken.Equals(refreshToken))
                     throw new Exception("Invalid Refresh Token.");
 
                 else if (user.TokenExpires < DateTime.Now)

@@ -46,9 +46,9 @@ namespace WpfClient.Services.WebService
         public async Task<ServiceResponse<GetUserDto>> RefreshToken(TokenUserDto user, string token)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            ConfigureAuthClient(client, "https://localhost:7130/api/", token);
+            ConfigureAuthClient(client, "https://localhost:7130/api/authorizations/", token);
 
-            var response = await client.PutAsJsonAsync("users", user);
+            var response = await client.PutAsJsonAsync("refreshtoken", user);
             var responseJson = await response.Content.ReadAsStringAsync();
             var deserealizedResponse = JsonConvert.DeserializeObject<ServiceResponse<GetUserDto>>(responseJson);
             return deserealizedResponse!;
