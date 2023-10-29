@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities.Dtos.TodoTaskDtos;
+using Entities.Dtos.UserDtos;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -94,6 +95,7 @@ namespace WpfClient.ViewModel
         private async void OnLoadTasksCommand(object parameter)
         {
             await GetPage(_startPage);
+            await RefreshToken();
             ResetDates();
         }
 
@@ -103,6 +105,7 @@ namespace WpfClient.ViewModel
         {
             CurrentPage++;
             await GetPage(CurrentPage);
+            await RefreshToken();
             ResetDates();
         }
 
@@ -112,6 +115,7 @@ namespace WpfClient.ViewModel
         {
             CurrentPage--;
             await GetPage(CurrentPage);
+            await RefreshToken();
             ResetDates();
         }
 
@@ -121,6 +125,7 @@ namespace WpfClient.ViewModel
         {
             CurrentPage = 1;
             await GetPage(CurrentPage);
+            await RefreshToken();
             ResetDates();
         }
 
@@ -130,6 +135,7 @@ namespace WpfClient.ViewModel
         {
             CurrentPage = PageCount;
             await GetPage(CurrentPage);
+            await RefreshToken();
             ResetDates();
         }
 
@@ -203,6 +209,7 @@ namespace WpfClient.ViewModel
 
             MessageBox.Show(response?.Data);
 
+            await RefreshToken();
             await GetPageAfterDeleting();
         }
 
@@ -224,6 +231,7 @@ namespace WpfClient.ViewModel
                 return;
             }
 
+            await RefreshToken();
             await GetPage(CurrentPage);
         }
 
@@ -247,6 +255,7 @@ namespace WpfClient.ViewModel
 
             MessageBox.Show(response?.Data);
 
+            await RefreshToken();
             await GetPage(CurrentPage);
         }
 
@@ -288,6 +297,20 @@ namespace WpfClient.ViewModel
             TasksPage = new BindingList<GetTodoTaskDto>(response.Data);
             OnPropertyChanged(nameof(TasksPage));
             OnPropertyChanged(nameof(PageText));
+        }
+
+        private async Task RefreshToken()
+        {
+            var currentUser = _mapper.Map<TokenUserDto>(Authorization!.CurrentUser);
+            var response = await _service.RefreshToken(currentUser, Authorization.CurrentUser.Token);
+
+            if (response.IsSuccessful == false)
+            {
+                MessageBox.Show(response?.Message);
+                return;
+            }
+
+            Authorization.SetCurrentUser(response.Data);
         }
 
         private void ResetDates()
