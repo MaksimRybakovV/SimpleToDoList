@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Entities.Dtos.UserDtos;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services.UserService;
 
@@ -19,12 +20,14 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize (Roles ="Admin")]
         public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> GetAll()
         {
             return await _service.GetAllUsersAsync();
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("{id}")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)
         {
@@ -37,6 +40,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("pagination")]
         public async Task<ActionResult<PageServiceResponse<List<GetUserDto>>>> GetPage([FromQuery]int page, [FromQuery]int pageSize)
         {
@@ -60,6 +64,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         [Route("{id}")]
         public async Task<ActionResult<ServiceResponse<string>>> UpdateUser(UpdateUserDto updatedUser)
         {
@@ -72,6 +77,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         [Route("{id}")]
         public async Task<ActionResult<ServiceResponse<string>>> DeleteUser(int id)
         {

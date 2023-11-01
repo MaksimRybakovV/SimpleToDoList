@@ -9,13 +9,13 @@ using System.Security.Cryptography;
 using System.Text;
 using WebApi.Data;
 
-namespace WebApi.Services.AuthotizationService
+namespace WebApi.Services.AuthService
 {
-    public class AuthorizationService : BaseService<User>, IAuthorizationService
+    public class AuthService : BaseService<User>, IAuthService
     {
         private readonly IConfiguration _configuration;
 
-        public AuthorizationService(DataContext context, IMapper mapper, ILogger<User> logger, IConfiguration configuration) 
+        public AuthService(DataContext context, IMapper mapper, ILogger<User> logger, IConfiguration configuration) 
             : base(context, mapper, logger) 
         {
             _configuration = configuration;

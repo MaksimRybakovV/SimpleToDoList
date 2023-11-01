@@ -1,8 +1,9 @@
 ﻿using Asp.Versioning;
 using Entities.Dtos.UserDtos;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Services.AuthotizationService;
+using WebApi.Services.AuthService;
 
 namespace WebApi.Controllers
 {
@@ -11,9 +12,9 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class AuthorizationsController : ControllerBase
     {
-        private readonly IAuthorizationService _service;
+        private readonly IAuthService _service;
 
-        public AuthorizationsController(IAuthorizationService service)
+        public AuthorizationsController(IAuthService service)
         {
             _service = service;
         }
@@ -31,6 +32,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [Route("refreshtoken")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> RefreshToken(TokenUserDto user)
         {
@@ -43,6 +45,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [Route("logout/{id}")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> Logout(int id)
         {

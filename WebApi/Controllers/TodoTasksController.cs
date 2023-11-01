@@ -1,12 +1,14 @@
 ﻿using Asp.Versioning;
 using Entities.Dtos.TodoTaskDtos;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services.TodoTaskService;
 
 namespace WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [ApiVersion(1.0)]
     public class TodoTasksController : ControllerBase
     {
@@ -18,6 +20,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("api/Users/[controller]")]
         public async Task<ActionResult<ServiceResponse<List<GetTodoTaskDto>>>> GetAll()
         {
@@ -25,6 +28,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("api/Users/[controller]/{id}")]
         public async Task<ActionResult<ServiceResponse<GetTodoTaskDto>>> GetSingle(int id)
         {
@@ -37,6 +41,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("api/Users/[controller]/pagination")]
         public async Task<ActionResult<PageServiceResponse<List<GetTodoTaskDto>>>> GetPage([FromQuery]int page, [FromQuery]int pageSize)
         {
